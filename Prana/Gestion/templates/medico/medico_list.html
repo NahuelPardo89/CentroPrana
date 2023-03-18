@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Lista de Médicos</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Especialidades</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for medico in object_list %}
+        <tr>
+          <td>{{ medico.usuario.nombre }}</td>
+          <td>{{ medico.usuario.apellido }}</td>
+          <td>
+            {% for especialidad in medico.especialidades.all %}
+              {{ especialidad.nombre }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            <a href="{% url 'medico_update' medico.pk %}">Editar</a> |
+            <a href="{% url 'medico_delete' medico.pk %}">Eliminar</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'medico_create' %}">Agregar nuevo Médico</a>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Especialidades Médicas</h2>
+  <a href="{% url 'especialidad_medica_create' %}">Agregar nueva especialidad médica</a>
+  <ul>
+    {% for especialidad_medica in object_list %}
+      <li>
+        {{ especialidad_medica.nombre }}
+        <a href="{% url 'especialidad_medica_update' especialidad_medica.pk %}">Editar</a>
+        <a href="{% url 'especialidad_medica_delete' especialidad_medica.pk %}">Eliminar</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

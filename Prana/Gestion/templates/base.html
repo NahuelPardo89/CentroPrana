@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'usuario_list' %}">Usuarios</a>
+        <a href="{% url 'medico_list' %}">Medicos</a>
+        <a href="{% url 'paciente_list' %}">Pacientes</a>
+        <a href="{% url 'secretaria_list' %}">Secretarias</a>
+        <a href="{% url 'obra_social_list' %}">Obras Sociales</a>
+        <a href="{% url 'especialidad_medica_list' %}">Especialidades Médicas</a>
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

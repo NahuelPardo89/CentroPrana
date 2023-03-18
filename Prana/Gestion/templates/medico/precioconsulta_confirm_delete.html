@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Eliminar Precio de Consulta</h2>
+    <p>¿Estás seguro de que deseas eliminar este Precio de Consulta para el Médico: {{ medico }} y la Obra Social {{ object.obra_social }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a href="{% url 'medico_precioconsulta_list' pk=medico.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Precios de Consulta para el Médico: {{ medico }}</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Obra Social</th>
+                <th>Precio</th>
+                <th>Fecha de Vigencia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for precioconsulta in object_list %}
+                <tr>
+                    <td>{{ precioconsulta.obra_social }}</td>
+                    <td>{{ precioconsulta.precio }}</td>
+                    <td>{{ precioconsulta.fecha_vigencia }}</td>
+                    <td>
+                        <a href="{% url 'medico_precioconsulta_update' medico_pk=medico.pk pk=precioconsulta.pk %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'medico_precioconsulta_delete' medico_pk=medico.pk pk=precioconsulta.pk %}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No hay Precios de Consulta registrados para este Médico.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'medico_precioconsulta_create' pk=medico.pk %}" class="btn btn-success">Agregar Precio de Consulta</a>
+{% endblock %}

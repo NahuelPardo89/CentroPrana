@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% if form.instance.pk %}Editar{% else %}Agregar{% endif %} Precio de Consulta para el Médico: {{ medico }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'medico_precioconsulta_list' pk=medico.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+{% endblock %}
