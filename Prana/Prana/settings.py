@@ -28,7 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'Gestion.Usuario'
-
+LOGIN_REDIRECT_URL = 'home' # Redirecciona a la vista 'home' después del inicio de sesión
+LOGOUT_REDIRECT_URL = 'home' # Redirecciona a la vista 'home' después del cierre de sesión
 
 # Application definition
 
