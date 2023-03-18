@@ -288,6 +288,19 @@ class PacienteDeleteView(generic.DeleteView):
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import ObraSocial
+from django.views.generic import TemplateView
+
+class HomeView(TemplateView):
+    def get_template_names(self):
+        if not self.request.user.is_authenticated:
+            return ['home.html']
+        
+        if self.request.user.groups.filter(name="Medicos").exists():
+            return ['medico/home.html']
+        elif self.request.user.groups.filter(name="Secretarias").exists():
+            return ['secretaria/home.html']
+        else:
+            return ['paciente/home.html']
 
 class ObraSocialListView(generic.ListView):
     model = ObraSocial
