@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="d-flex flex-column align-items-stretch my-3 w-25">
+        <a class="btn btn-primary mb-2" href="{% url 'home' %}">Inicio</a>
+        <a class="btn btn-primary mb-2" href="{% url 'usuario_list' %}">Usuarios</a>
+        <a class="btn btn-primary mb-2" href="{% url 'paciente_list' %}">Pacientes</a>
+        <a class="btn btn-primary mb-2" href="{% url 'medico_list' %}">Médicos</a>
+        <a class="btn btn-primary mb-2" href="{% url 'secretaria_list' %}">Secretarias</a>
+        <a class="btn btn-primary mb-2" href="{% url 'obra_social_list' %}">Obra Social</a>
+        <a class="btn btn-primary mb-2" href="{% url 'especialidad_medica_list' %}">Especialidad Médica</a>
+    </div>
+{% endblock %}
