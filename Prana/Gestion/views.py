@@ -3,6 +3,7 @@ from django.shortcuts import render,HttpResponseRedirect, redirect,get_object_or
 from django.contrib.auth.models import Group
 
 from django.views import generic
+
 from .models import Paciente, Medico, Secretaria
 from django.urls import reverse_lazy
 from django.views import generic
@@ -11,7 +12,7 @@ from django.views import generic
 from .models import Usuario, Medico, Secretaria, ObraSocial, PrecioConsulta, EspecialidadMedica
 
 #forms
-from .forms import UsuarioForm,UsuarioUpdateForm, MedicoForm,PrecioConsultaCreateForm,PrecioConsultaUpdateForm,UsuarioUpdateForm, SecretariaForm
+from .forms import UsuarioForm,UsuarioUpdateForm, MedicoForm,PrecioConsultaCreateForm,PrecioConsultaUpdateForm,UsuarioUpdateForm, SecretariaForm,PacienteForm
 
 
 
@@ -262,35 +263,88 @@ class SecretariaDeleteView(generic.DeleteView):
         usuario.delete()
         return response
 
+
+# ... Vistas de Paciente ...
+
 class PacienteListView(generic.ListView):
     model = Paciente
     template_name = 'paciente/paciente_list.html'
-# ... Vistas de Paciente ...
+    context_object_name = 'pacientes'
+    paginate_by = 10
+
 class PacienteCreateView(generic.CreateView):
     model = Paciente
-    fields = '__all__'
+    form_class = PacienteForm
     template_name = 'paciente/paciente_form.html'
-    success_url = reverse_lazy('paciente_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['usuario_form'] = UsuarioForm(self.request.POST)
+        else:
+            context['usuario_form'] = UsuarioForm()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        usuario_form = context['usuario_form']
+        if usuario_form.is_valid():
+            usuario = usuario_form.save(commit=False)
+            usuario.set_password(usuario.password)
+            usuario.save()
+            pacientes_group, created = Group.objects.get_or_create(name="Pacientes")
+            usuario.groups.add(pacientes_group)
+            paciente = form.save(commit=False)
+            paciente.usuario = usuario
+            paciente.save()
+            return redirect('paciente_list')
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 class PacienteUpdateView(generic.UpdateView):
     model = Paciente
-    fields = '__all__'
+    form_class = PacienteForm
     template_name = 'paciente/paciente_form.html'
     success_url = reverse_lazy('paciente_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['usuario_form'] = UsuarioUpdateForm(self.request.POST, instance=self.object.usuario)
+        else:
+            context['usuario_form'] = UsuarioUpdateForm(instance=self.object.usuario)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        usuario_form = context['usuario_form']
+        if usuario_form.is_valid():
+            usuario_form.save()
+            paciente = form.save(commit=False)
+            paciente.usuario = self.object.usuario
+            paciente.save()
+            form.save_m2m()
+            return redirect('paciente_list')
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 class PacienteDeleteView(generic.DeleteView):
     model = Paciente
     template_name = 'paciente/paciente_confirm_delete.html'
     success_url = reverse_lazy('paciente_list')
 
+    def post(self, request, *args, **kwargs):
+        paciente = self.get_object()
+        usuario = paciente.usuario
+        response = super().post(request, *args, **kwargs)
+        usuario.delete()
+        return response
+
 #vistas obra social
 
-from django.urls import reverse_lazy
-from django.views import generic
-from .models import ObraSocial
-from django.views.generic import TemplateView
 
-class HomeView(TemplateView):
+
+class HomeView(generic.TemplateView):
     def get_template_names(self):
         if not self.request.user.is_authenticated:
             return ['home.html']

@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory,CheckboxSelectMultiple
-from .models import Medico, Usuario,PrecioConsulta,ObraSocial, Secretaria
+from .models import Medico, Usuario,PrecioConsulta,ObraSocial, Secretaria,Paciente
 
 class UsuarioForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -53,3 +53,9 @@ class SecretariaForm(forms.ModelForm):
     class Meta:
         model = Secretaria
         fields = ['horario']
+
+
+class PacienteForm(forms.ModelForm):
+    class Meta:
+        model = Paciente
+        fields = ['direccion', 'instagram', 'facebook', 'numero_obra_social', 'obras_sociales']

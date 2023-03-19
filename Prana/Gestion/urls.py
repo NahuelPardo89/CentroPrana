@@ -13,7 +13,7 @@ urlpatterns = [
     path('pacientes/crear/', views.PacienteCreateView.as_view(), name='paciente_create'),
     path('pacientes/editar/<int:pk>/', views.PacienteUpdateView.as_view(), name='paciente_update'),
     path('pacientes/eliminar/<int:pk>/', views.PacienteDeleteView.as_view(), name='paciente_delete'),
-
+    
     path('medicos/', views.MedicoListView.as_view(), name='medico_list'),
     path('medicos/nuevo/', views.MedicoCreateView.as_view(), name='medico_create'),
     path('medicos/editar/<int:pk>/', views.MedicoUpdateView.as_view(), name='medico_update'),
