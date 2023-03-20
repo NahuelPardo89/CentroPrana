@@ -37,6 +37,17 @@ urlpatterns = [
     path('especialidad_medica/create/', views.EspecialidadMedicaCreateView.as_view(), name='especialidad_medica_create'),
     path('especialidad_medica/update/<int:pk>/', views.EspecialidadMedicaUpdateView.as_view(), name='especialidad_medica_update'),
     path('especialidad_medica/delete/<int:pk>/', views.EspecialidadMedicaDeleteView.as_view(), name='especialidad_medica_delete'),
+
+    path('turnos/', views.TurnoListView.as_view(), name='turno_list'),
+    path('turnos/crear/', views.TurnoCreateView.as_view(), name='turno_create'),
+    path('turnos/editar/<int:pk>/', views.TurnoUpdateView.as_view(), name='turno_update'),
+    path('turnos/eliminar/<int:pk>/', views.TurnoDeleteView.as_view(), name='turno_delete'),
+    path('turnos/confirmar/<int:pk>/', views.TurnoConfirmView.as_view(), name='turno_confirm'),
+
+    path('consultas/', views.ConsultaListView.as_view(), name='consulta_list'),
+    path('consultas/crear/', views.ConsultaCreateView.as_view(), name='consulta_create'),
+    path('consultas/editar/<int:pk>/', views.ConsultaUpdateView.as_view(), name='consulta_update'),
+    path('consultas/eliminar/<int:pk>/', views.ConsultaDeleteView.as_view(), name='consulta_delete'),
     
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
