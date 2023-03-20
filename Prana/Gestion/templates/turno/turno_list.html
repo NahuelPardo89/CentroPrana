@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Lista de turnos</h1>
+  <a href="{% url 'turno_create' %}" class="btn btn-primary">Agregar turno</a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Paciente</th>
+        <th>Médico</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Obra social</th>
+        <th>Confirmado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for turno in object_list %}
+        <tr>
+          <td>{{ turno.paciente }}</td>
+          <td>{{ turno.medico }}</td>
+          <td>{{ turno.fecha }}</td>
+          <td>{{ turno.hora }}</td>
+          <td>{{ turno.obra_social }}</td>
+          <td>
+            {% if not turno.confirmado %}
+              <form method="post" action="{% url 'turno_confirm' turno.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Confirmar</button>
+              </form>
+            {% else %}
+              Confirmado
+            {% endif %}
+          </td>
+          <td>
+            {% if not turno.confirmado %}
+            <a href="{% url 'turno_update' turno.pk %}" class="btn btn-warning">Editar</a>
+            {% endif %}
+            <a href="{% url 'turno_delete' turno.pk %}" class="btn btn-danger">Eliminar</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

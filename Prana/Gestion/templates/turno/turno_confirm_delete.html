@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Eliminar turno</h1>
+  <p>¿Está seguro de que desea eliminar el turno de {{ object.paciente }} con {{ object.medico }} el {{ object.fecha }} a las {{ object.hora }}?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'turno_list' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

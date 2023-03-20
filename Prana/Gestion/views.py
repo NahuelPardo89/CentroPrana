@@ -4,15 +4,17 @@ from django.contrib.auth.models import Group
 
 from django.views import generic
 
+
+
 from .models import Paciente, Medico, Secretaria
 from django.urls import reverse_lazy
 from django.views import generic
 
 #models
-from .models import Usuario, Medico, Secretaria, ObraSocial, PrecioConsulta, EspecialidadMedica
+from .models import Usuario, Medico, Secretaria, ObraSocial, PrecioConsulta, EspecialidadMedica,Turno,Consulta
 
 #forms
-from .forms import UsuarioForm,UsuarioUpdateForm, MedicoForm,PrecioConsultaCreateForm,PrecioConsultaUpdateForm,UsuarioUpdateForm, SecretariaForm,PacienteForm
+from .forms import UsuarioForm,UsuarioUpdateForm, MedicoForm,PrecioConsultaCreateForm,PrecioConsultaUpdateForm,UsuarioUpdateForm, SecretariaForm,PacienteForm, TurnoForm, ConsultaForm
 
 
 
@@ -401,3 +403,50 @@ class EspecialidadMedicaDeleteView(generic.DeleteView):
     model = EspecialidadMedica
     template_name = 'especialidadMedica/especialidad_medica_confirm_delete.html'
     success_url = reverse_lazy('especialidad_medica_list')
+
+class TurnoListView(generic.ListView):
+    model = Turno
+    template_name = 'turno/turno_list.html'
+    success_url = reverse_lazy('turno_list')
+class TurnoCreateView(generic.CreateView):
+    model = Turno
+    form_class = TurnoForm
+    template_name = 'turno/turno_form.html'
+    success_url = reverse_lazy('turno_list')
+class TurnoUpdateView(generic.UpdateView):
+    model = Turno
+    form_class = TurnoForm
+    template_name = 'turno/turno_form.html'
+    success_url = reverse_lazy('turno_list')
+class TurnoDeleteView(generic.DeleteView):
+    model = Turno
+    template_name = 'turno/turno_confirm_delete.html'
+    success_url = reverse_lazy('turno_list')
+
+class TurnoConfirmView(generic.View):
+    def post(self, request, *args, **kwargs):
+        turno = Turno.objects.get(pk=self.kwargs['pk'])
+        turno.confirmado = True
+        turno.save()
+        return HttpResponseRedirect(reverse_lazy('turno_list'))
+
+class ConsultaListView(generic.ListView):
+    model = Consulta
+    template_name = 'turno/consulta_list.html'
+
+class ConsultaCreateView(generic.CreateView):
+    model = Consulta
+    form_class = ConsultaForm
+    template_name = 'turno/consulta_form.html'
+    success_url = reverse_lazy('consulta_list')
+
+class ConsultaUpdateView(generic.UpdateView):
+    model = Consulta
+    form_class = ConsultaForm
+    template_name = 'turno/consulta_form.html'
+    success_url = reverse_lazy('consulta_list')
+
+class ConsultaDeleteView(generic.DeleteView):
+    model = Consulta
+    template_name = 'turno/consulta_confirm_delete.html'
+    success_url = reverse_lazy('consulta_list')

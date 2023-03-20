@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Lista de consultas</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Paciente</th>
+        <th>Médico</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for consulta in object_list %}
+        <tr>
+          <td>{{ consulta.turno.paciente }}</td>
+          <td>{{ consulta.turno.medico }}</td>
+          <td>{{ consulta.turno.fecha }}</td>
+          <td>{{ consulta.turno.hora }}</td>
+          <td>{{ consulta.precio }}</td>
+          <td>
+            <a href="{% url 'consulta_update' consulta.pk %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'consulta_delete' consulta.pk %}" class="btn btn-danger">Eliminar</a>
+            </td>
+            </tr>
+            {% endfor %}
+    </tbody>
+            
+  </table>
+{% endblock %}
