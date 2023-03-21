@@ -5,8 +5,9 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">Nombre</th>
+        
         <th scope="col">Apellido</th>
+        <th scope="col">Nombre</th>
         <th scope="col">Email</th>
         <th scope="col">Acciones</th>
       </tr>
@@ -14,12 +15,13 @@
     <tbody>
       {% for usuario in object_list %}
         <tr>
-          <td>{{ usuario.nombre }}</td>
+          
           <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.nombre }}</td>
           <td>{{ usuario.email }}</td>
           <td>
-            <a href="{% url 'usuario_update' usuario.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
-            <a href="{% url 'usuario_delete' usuario.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+            <a href="{% url 'usuario_update' usuario.pk %}" class="btn btn-sm btn-primary">Editar</a>
+            <a href="{% url 'usuario_delete' usuario.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
           </td>
         </tr>
       {% endfor %}

@@ -3,21 +3,28 @@
 {% block content %}
   <div class="d-flex flex-column align-items-center">
     <h2 class="text-center mb-4">Lista de Pacientes</h2>
+    
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Nombre</th>
           <th>Apellido</th>
+          <th>Nombre</th>
           <th>Dirección</th>
+          <th>Obra Social</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         {% for paciente in pacientes %}
           <tr>
-            <td>{{ paciente.usuario.nombre }}</td>
             <td>{{ paciente.usuario.apellido }}</td>
+            <td>{{ paciente.usuario.nombre }}</td>
             <td>{{ paciente.direccion }}</td>
+            <td>
+              {% for obra_social in paciente.obras_sociales.all %}
+                {{ obra_social.nombre }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </td>
             <td>
               <a href="{% url 'paciente_update' paciente.pk %}" class="btn btn-secondary btn-sm">Editar</a>
               <a href="{% url 'paciente_delete' paciente.pk %}" class="btn btn-danger btn-sm">Eliminar</a>

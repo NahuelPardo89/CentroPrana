@@ -1,11 +1,60 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>{% if form.instance.pk %}Editar Paciente{% else %}Nuevo Paciente{% endif %}</h2>
-    <form method="post" novalidate>
-        {% csrf_token %}
-        {{ form.as_p }}
-        {{ usuario_form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
+    <div class="container mt-4">
+        <h2>{% if form.instance.pk %}Editar Paciente{% else %}Nuevo Paciente{% endif %}</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                {% for field in usuario_form %}
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+                        <input type="{{ field.field.widget.input_type }}"
+                               class="form-control{% if field.errors %} is-invalid{% endif %}"
+                               id="{{ field.auto_id }}"
+                               name="{{ field.html_name }}"
+                               value="{{ field.value|default:'' }}"
+                               {% if field.field.required %}required{% endif %}>
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                {% for field in form %}
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+                        {% if field.name == 'obras_sociales' %}
+                            <div>
+                                {% for choice in field.field.choices %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="{{ field.html_name }}" id="{{ field.auto_id }}_{{ forloop.counter0 }}" value="{{ choice.0 }}" {% if choice.0 in field.value %}checked{% endif %}>
+                                        <label class="form-check-label" for="{{ field.auto_id }}_{{ forloop.counter0 }}">
+                                            {{ choice.1 }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <input type="{{ field.field.widget.input_type }}"
+                                   class="form-control{% if field.errors %} is-invalid{% endif %}"
+                                   id="{{ field.auto_id }}"
+                                   name="{{ field.html_name }}"
+                                   value="{{ field.value|default:'' }}"
+                                   {% if field.field.required %}required{% endif %}>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
 {% endblock %}

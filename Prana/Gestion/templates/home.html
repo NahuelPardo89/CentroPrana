@@ -3,4 +3,45 @@
     
 
 <h1>home sin loguear</h1>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Menú</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'usuario_list' %}">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'paciente_list' %}">Pacientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'medico_list' %}">Médicos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'secretaria_list' %}">Secretarías</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'obra_social_list' %}">Obras Sociales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'especialidad_medica_list' %}">Especialidades Médicas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'turno_list' %}">Turnos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'consulta_list' %}">Consultas</a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
 {% endblock %}
