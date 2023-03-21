@@ -39,7 +39,9 @@ urlpatterns = [
     path('especialidad_medica/delete/<int:pk>/', views.EspecialidadMedicaDeleteView.as_view(), name='especialidad_medica_delete'),
 
     path('turnos/', views.TurnoListView.as_view(), name='turno_list'),
-    path('turnos/crear/', views.TurnoCreateView.as_view(), name='turno_create'),
+    path('seleccion_medico_paciente/', views.SeleccionMedicoPacienteView.as_view(), name='seleccion_medico_paciente'),
+    path('crear_turno/<int:paciente_id>/<int:medico_id>/', views.TurnoCreateView.as_view(), name='turno_create'),
+    #path('turnos/crear/', views.TurnoCreateView.as_view(), name='turno_create'),
     path('turnos/editar/<int:pk>/', views.TurnoUpdateView.as_view(), name='turno_update'),
     path('turnos/eliminar/<int:pk>/', views.TurnoDeleteView.as_view(), name='turno_delete'),
     path('turnos/confirmar/<int:pk>/', views.TurnoConfirmView.as_view(), name='turno_confirm'),

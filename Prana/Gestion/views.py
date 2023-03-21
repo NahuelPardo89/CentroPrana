@@ -1,4 +1,4 @@
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.shortcuts import render,HttpResponseRedirect, redirect,get_object_or_404
 from django.contrib.auth.models import Group
 
@@ -14,7 +14,8 @@ from django.views import generic
 from .models import Usuario, Medico, Secretaria, ObraSocial, PrecioConsulta, EspecialidadMedica,Turno,Consulta
 
 #forms
-from .forms import UsuarioForm,UsuarioUpdateForm, MedicoForm,PrecioConsultaCreateForm,PrecioConsultaUpdateForm,UsuarioUpdateForm, SecretariaForm,PacienteForm, TurnoForm, ConsultaForm
+from .forms import (UsuarioForm,UsuarioUpdateForm, MedicoForm,PrecioConsultaCreateForm,PrecioConsultaUpdateForm,
+UsuarioUpdateForm, SecretariaForm,PacienteForm, TurnoForm, ConsultaForm,SeleccionMedicoPacienteForm)
 
 
 
@@ -236,9 +237,9 @@ class SecretariaUpdateView(generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['usuario_form'] = UsuarioForm(self.request.POST, instance=self.object.usuario)
+            context['usuario_form'] = UsuarioUpdateForm(self.request.POST, instance=self.object.usuario)
         else:
-            context['usuario_form'] = UsuarioForm(instance=self.object.usuario)
+            context['usuario_form'] = UsuarioUpdateForm(instance=self.object.usuario)
         return context
 
     def form_valid(self, form):
@@ -274,6 +275,9 @@ class PacienteListView(generic.ListView):
     context_object_name = 'pacientes'
     paginate_by = 10
 
+    def get_queryset(self):
+        return Paciente.objects.order_by('usuario__apellido')
+
 class PacienteCreateView(generic.CreateView):
     model = Paciente
     form_class = PacienteForm
@@ -299,6 +303,7 @@ class PacienteCreateView(generic.CreateView):
             paciente = form.save(commit=False)
             paciente.usuario = usuario
             paciente.save()
+            form.save_m2m()
             return redirect('paciente_list')
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -408,11 +413,39 @@ class TurnoListView(generic.ListView):
     model = Turno
     template_name = 'turno/turno_list.html'
     success_url = reverse_lazy('turno_list')
+
+class SeleccionMedicoPacienteView(generic.FormView):
+    form_class = SeleccionMedicoPacienteForm
+    template_name = 'turno/seleccion_medico_paciente.html'
+
+    def form_valid(self, form):
+        paciente_id = form.cleaned_data['paciente'].pk
+        medico_id = form.cleaned_data['medico'].pk
+        return HttpResponseRedirect(reverse('turno_create', args=(paciente_id, medico_id)))
+class TurnoCreateView(generic.CreateView):
+    model = Turno
+    form_class = TurnoForm 
+    template_name = 'turno/turno_form.html'
+    success_url = reverse_lazy('turno_list')
+
+    def get_form(self, form_class=None):
+        paciente_id = self.kwargs['paciente_id']
+        medico_id = self.kwargs['medico_id']
+
+        if form_class is None:
+            form_class = self.get_form_class()
+
+        form = form_class(paciente_id=paciente_id, medico_id=medico_id, **self.get_form_kwargs())
+
+        return form
+
+"""
 class TurnoCreateView(generic.CreateView):
     model = Turno
     form_class = TurnoForm
     template_name = 'turno/turno_form.html'
     success_url = reverse_lazy('turno_list')
+"""    
 class TurnoUpdateView(generic.UpdateView):
     model = Turno
     form_class = TurnoForm

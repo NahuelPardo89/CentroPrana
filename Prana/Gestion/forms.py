@@ -63,8 +63,16 @@ class PacienteForm(forms.ModelForm):
             'obras_sociales': CheckboxSelectMultiple(),
         }
 
+from django import forms
+from .models import Turno, Paciente, Medico, ObraSocial
+from datetime import time
+
 class TurnoForm(forms.ModelForm):
-    hora_numero = forms.IntegerField(min_value=8, max_value=20, label="Hora")
+    HORAS_DISPONIBLES = [
+        (f'{hora}:{minutos:02d}', f'{hora}:{minutos:02d}') for hora in range(8, 21) for minutos in (0, 30)
+    ]
+
+    hora_numero = forms.ChoiceField(choices=HORAS_DISPONIBLES, label="Hora")
 
     class Meta:
         model = Turno
@@ -73,15 +81,45 @@ class TurnoForm(forms.ModelForm):
             'fecha': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d')
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, paciente_id=None, medico_id=None, **kwargs):
+        self.paciente_id = paciente_id
+        self.medico_id = medico_id
         super().__init__(*args, **kwargs)
+
+        if self.paciente_id and self.medico_id:
+            paciente = Paciente.objects.get(pk=self.paciente_id)
+            medico = Medico.objects.get(pk=self.medico_id)
+
+            self.fields['paciente'] = forms.ModelChoiceField(
+                queryset=Paciente.objects.filter(pk=self.paciente_id),
+                initial=self.paciente_id,
+                widget=forms.Select(attrs={'readonly': True, 'style': 'pointer-events: none;'})
+            )
+            self.fields['medico'] = forms.ModelChoiceField(
+                queryset=Medico.objects.filter(pk=self.medico_id),
+                initial=self.medico_id,
+                widget=forms.Select(attrs={'readonly': True, 'style': 'pointer-events: none;'})
+            )
+
+            obras_sociales = ObraSocial.objects.filter(paciente=paciente, medicos=medico)
+
+            if obras_sociales:
+                self.fields['obra_social'].queryset = obras_sociales
+            else:
+                particular = ObraSocial.objects.get(nombre="PARTICULAR")
+                self.fields['obra_social'].queryset = ObraSocial.objects.filter(pk=particular.pk)
+
+            self.fields['obra_social'].required = True
+            self.fields['obra_social'].empty_label = None
+
         if self.instance and self.instance.hora:
-            self.initial['hora_numero'] = self.instance.hora.hour
+            self.initial['hora_numero'] = self.instance.hora.strftime('%H:%M')
             self.initial['fecha'] = self.instance.fecha
 
     def clean_hora_numero(self):
         hora_numero = self.cleaned_data['hora_numero']
-        return time(hour=hora_numero)
+        hour, minute = map(int, hora_numero.split(':'))
+        return time(hour=hour, minute=minute)
 
     def save(self, commit=True):
         turno = super().save(commit=False)
@@ -89,6 +127,11 @@ class TurnoForm(forms.ModelForm):
         if commit:
             turno.save()
         return turno
+
+class SeleccionMedicoPacienteForm(forms.Form):
+    paciente = forms.ModelChoiceField(queryset=Paciente.objects.all(), label="Paciente")
+    medico = forms.ModelChoiceField(queryset=Medico.objects.all(), label="Médico")
+
 
 class ConsultaForm(forms.ModelForm):
     class Meta:
