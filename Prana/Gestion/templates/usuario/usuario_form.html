@@ -4,7 +4,24 @@
   <h1>{% if form.instance.pk %}Editar Usuario{% else %}Crear Usuario{% endif %}</h1>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
+    <div class="row">
+        {% for field in form %}
+        <div class="col-md-6 mb-3">
+            <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+            <input type="{{ field.field.widget.input_type }}"
+                   class="form-control{% if field.errors %} is-invalid{% endif %}"
+                   id="{{ field.auto_id }}"
+                   name="{{ field.html_name }}"
+                   value="{{ field.value|default:'' }}"
+                   {% if field.field.required %}required{% endif %}>
+            {% for error in field.errors %}
+            <div class="invalid-feedback">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
   </form>
 {% endblock %}

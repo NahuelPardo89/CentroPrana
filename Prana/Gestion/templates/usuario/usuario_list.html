@@ -2,13 +2,13 @@
 
 {% block content %}
   <h1>Lista de Usuarios</h1>
-  <table>
+  <table class="table table-striped">
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>Acciones</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Email</th>
+        <th scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -18,12 +18,12 @@
           <td>{{ usuario.apellido }}</td>
           <td>{{ usuario.email }}</td>
           <td>
-            <a href="{% url 'usuario_update' usuario.pk %}">Editar</a> |
-            <a href="{% url 'usuario_delete' usuario.pk %}">Eliminar</a>
+            <a href="{% url 'usuario_update' usuario.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+            <a href="{% url 'usuario_delete' usuario.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
           </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-  <a href="{% url 'usuario_create' %}">Agregar nuevo Usuario</a>
+  <a href="{% url 'usuario_create' %}" class="btn btn-primary">Agregar nuevo Usuario</a>
 {% endblock %}

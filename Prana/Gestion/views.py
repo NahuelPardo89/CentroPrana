@@ -450,3 +450,4 @@ class ConsultaDeleteView(generic.DeleteView):
     model = Consulta
     template_name = 'turno/consulta_confirm_delete.html'
     success_url = reverse_lazy('consulta_list')
+

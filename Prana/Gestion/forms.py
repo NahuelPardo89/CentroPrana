@@ -27,7 +27,7 @@ class UsuarioUpdateForm(forms.ModelForm):
 class MedicoForm(forms.ModelForm):
     class Meta:
         model = Medico
-        fields = ('especialidades', 'matricula')
+        fields = ('especialidades', 'matricula','horario')
         widgets = {
             'especialidades': CheckboxSelectMultiple(),
         }
@@ -59,6 +59,9 @@ class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
         fields = ['direccion', 'instagram', 'facebook', 'numero_obra_social', 'obras_sociales']
+        widgets = {
+            'obras_sociales': CheckboxSelectMultiple(),
+        }
 
 class TurnoForm(forms.ModelForm):
     hora_numero = forms.IntegerField(min_value=8, max_value=20, label="Hora")

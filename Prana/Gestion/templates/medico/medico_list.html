@@ -2,13 +2,14 @@
 
 {% block content %}
   <h1>Lista de Médicos</h1>
-  <table>
+  <table class="table table-striped">
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Especialidades</th>
-        <th>Acciones</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Especialidades</th>
+        <th scope="col">Obras Sociales</th>
+        <th scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -22,12 +23,18 @@
             {% endfor %}
           </td>
           <td>
-            <a href="{% url 'medico_update' medico.pk %}">Editar</a> |
-            <a href="{% url 'medico_delete' medico.pk %}">Eliminar</a>
+            {% for obra_social in medico.obra_social.all %}
+              {{ obra_social.nombre }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            <a href="{% url 'medico_update' medico.pk %}" class="btn btn-sm btn-primary">Editar datos</a>
+            <a href="{% url 'medico_precioconsulta_list' medico.pk %}" class="btn btn-sm btn-primary">Editar obras sociales</a>
+            <a href="{% url 'medico_delete' medico.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
           </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-  <a href="{% url 'medico_create' %}">Agregar nuevo Médico</a>
+  <a href="{% url 'medico_create' %}" class="btn btn-primary">Agregar nuevo Médico</a>
 {% endblock %}
