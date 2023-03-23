@@ -27,7 +27,7 @@ class UsuarioUpdateForm(forms.ModelForm):
 class MedicoForm(forms.ModelForm):
     class Meta:
         model = Medico
-        fields = ('especialidades', 'matricula','horario')
+        fields = ('especialidades', 'matricula')
         widgets = {
             'especialidades': CheckboxSelectMultiple(),
         }
@@ -52,7 +52,7 @@ class PrecioConsultaUpdateForm(forms.ModelForm):
 class SecretariaForm(forms.ModelForm):
     class Meta:
         model = Secretaria
-        fields = ['horario']
+        fields = ['horario_entrada','horario_salida']
 
 
 class PacienteForm(forms.ModelForm):
@@ -63,9 +63,7 @@ class PacienteForm(forms.ModelForm):
             'obras_sociales': CheckboxSelectMultiple(),
         }
 
-from django import forms
-from .models import Turno, Paciente, Medico, ObraSocial
-from datetime import time
+
 
 class TurnoForm(forms.ModelForm):
     HORAS_DISPONIBLES = [

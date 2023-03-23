@@ -1,12 +1,12 @@
 # models/secretaria.py
 from django.db import models
 from .usuario import Usuario
-from .horario import Horario
+
 
 class Secretaria(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
-    horario = models.OneToOneField(Horario, on_delete=models.CASCADE, null=True, blank=True)
-
+    horario_entrada= models.CharField(max_length=5,blank=True)
+    horario_salida= models.CharField(max_length=5,blank=True)
     class Meta:
         verbose_name = 'Secretaria'
         verbose_name_plural = 'Secretarias'

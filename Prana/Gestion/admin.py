@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (Usuario, Paciente, Medico, EspecialidadMedica, ObraSocial,
-                     PrecioConsulta, Secretaria, Horario, Turno, Consulta)
+                     PrecioConsulta, Secretaria, Turno, Consulta)
 
 class UsuarioAdmin(admin.ModelAdmin):
     list_display = ('dni', 'nombre', 'apellido', 'email', 'telefono', 'is_active', 'is_staff')
@@ -18,7 +18,7 @@ class MedicoAdmin(admin.ModelAdmin):
     list_filter = ('especialidades', 'obra_social')
 
 class SecretariaAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'horario')
+    list_display = ('usuario', 'horario_entrada','horario_salida')
     search_fields = ('usuario__nombre', 'usuario__apellido')
 
 admin.site.register(Usuario, UsuarioAdmin)
@@ -28,6 +28,6 @@ admin.site.register(EspecialidadMedica)
 admin.site.register(ObraSocial)
 admin.site.register(PrecioConsulta)
 admin.site.register(Secretaria, SecretariaAdmin)
-admin.site.register(Horario)
+
 admin.site.register(Turno)
 admin.site.register(Consulta)
