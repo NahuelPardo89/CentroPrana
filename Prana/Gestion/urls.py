@@ -22,6 +22,12 @@ urlpatterns = [
     path('medicos/<int:pk>/precios/agregar/', views.PrecioConsultaCreateView.as_view(), name='medico_precioconsulta_create'),
     path('medicos/<int:medico_pk>/precios/<int:pk>/editar/', views.PrecioConsultaUpdateView.as_view(), name='medico_precioconsulta_update'),
     path('medicos/<int:medico_pk>/precios/<int:pk>/eliminar/', views.PrecioConsultaDeleteView.as_view(), name='medico_precioconsulta_delete'),
+    path('medicos/<int:medico_id>/horario/', views.HorarioDiaListView.as_view(), name='horario_list'),
+    
+    path('medicos/<int:medico_id>/horario/', views.HorarioDiaListView.as_view(), name='horario_list'),
+    path('medicos/<int:medico_id>/horario/crear/', views.HorarioDiaCreateView.as_view(), name='horario_create'),
+    path('medicos/<int:medico_id>/horario/<int:pk>/editar/', views.HorarioDiaUpdateView.as_view(), name='horario_update'),
+    path('medicos/<int:medico_id>/horario/<int:pk>/eliminar/', views.HorarioDiaDeleteView.as_view(), name='horario_delete'),
 
     path('secretarias/', views.SecretariaListView.as_view(), name='secretaria_list'),
     path('secretarias/nuevo/', views.SecretariaCreateView.as_view(), name='secretaria_create'),

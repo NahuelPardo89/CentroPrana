@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{% if horario %}Editar{% else %}Agregar{% endif %} Horario</h2>
+  
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if horario %}Actualizar{% else %}Agregar{% endif %}</button>
+  </form>
+{% endblock %}

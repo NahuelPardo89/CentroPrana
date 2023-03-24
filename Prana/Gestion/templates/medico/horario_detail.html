@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ horario }}</h1>
+  <p>Médico: {{ horario.medico }}</p>
+  <p>Día: {{ horario.get_dia_display }}</p>
+  <p>Hora de inicio: {{ horario.hora_inicio }}</p>
+  <p>Hora de fin: {{ horario.hora_fin }}</p>
+  <a href="{% url 'horario_update' pk=horario.pk %}">Editar</a>
+  <a href="{% url 'horario_delete' pk=horario.pk %}">Eliminar</a>
+{% endblock %}

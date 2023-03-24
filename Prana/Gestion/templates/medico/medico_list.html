@@ -30,7 +30,9 @@
           <td>
             <a href="{% url 'medico_update' medico.pk %}" class="btn btn-sm btn-primary">Editar datos</a>
             <a href="{% url 'medico_precioconsulta_list' medico.pk %}" class="btn btn-sm btn-primary">Editar obras sociales</a>
+            <a href="{% url 'horario_list' medico.pk %}" class="btn btn-sm btn-primary">Editar horario</a>
             <a href="{% url 'medico_delete' medico.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+           
           </td>
         </tr>
       {% endfor %}

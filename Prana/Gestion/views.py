@@ -11,11 +11,11 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 #models
-from .models import Usuario, Medico, Secretaria, ObraSocial, PrecioConsulta, EspecialidadMedica,Turno,Consulta
+from .models import Usuario, Medico, Secretaria, ObraSocial, PrecioConsulta, EspecialidadMedica,Turno,Consulta, HorarioDia
 
 #forms
 from .forms import (UsuarioForm,UsuarioUpdateForm, MedicoForm,PrecioConsultaCreateForm,PrecioConsultaUpdateForm,
-UsuarioUpdateForm, SecretariaForm,PacienteForm, TurnoForm, ConsultaForm,SeleccionMedicoPacienteForm)
+UsuarioUpdateForm, SecretariaForm,PacienteForm, TurnoForm, ConsultaForm,SeleccionMedicoPacienteForm, HorarioDiaForm)
 
 
 
@@ -193,6 +193,63 @@ class PrecioConsultaDeleteView(generic.DeleteView):
         context['medico'] = Medico.objects.get(pk=self.kwargs['medico_pk'])  # Cambiar 'pk' a 'medico_pk'
         return context
 
+class HorarioDiaListView(generic.ListView):
+    template_name = 'medico/horario_list.html'
+    context_object_name = 'horarios'
+
+    def get_queryset(self):
+        medico_id = self.kwargs['medico_id']
+        return HorarioDia.objects.filter(medico_id=medico_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['medico_id'] = self.kwargs['medico_id']
+        return context
+
+class HorarioDiaCreateView(generic.CreateView):
+    model = HorarioDia
+    form_class = HorarioDiaForm
+    template_name = 'medico/horario_form.html'
+
+    def form_valid(self, form):
+        medico_id = self.kwargs['medico_id']
+        medico = Medico.objects.get(pk=medico_id)
+        dia = form.cleaned_data['dia']
+
+        if HorarioDia.objects.filter(medico=medico, dia=dia).exists():
+            form.add_error('dia', 'Ya existe un horario para este médico y este día')
+            return self.form_invalid(form)
+
+        form.instance.medico = medico
+        try:
+            return super().form_valid(form)
+        except IntegrityError as e:
+            form.add_error(None, 'Error de integridad en la base de datos')
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('horario_list', kwargs={'medico_id': self.kwargs['medico_id']})
+
+class HorarioDiaUpdateView(generic.UpdateView):
+    model = HorarioDia
+    form_class = HorarioDiaForm
+    template_name = 'medico/horario_form.html'
+    context_object_name = 'horario'
+
+    def get_success_url(self):
+        medico_id = self.object.medico.pk
+        return reverse_lazy('horario_list', kwargs={'medico_id': medico_id})
+
+class HorarioDiaDeleteView(generic.DeleteView):
+    model = HorarioDia
+    template_name = 'medico/horario_confirm_delete.html'
+    context_object_name = 'horario'
+
+    def get_success_url(self):
+        return reverse_lazy('horario_list', kwargs={'medico_id': self.object.medico.pk})
+
+
+
 # Vistas de Secretaria
 class SecretariaListView(generic.ListView):
     model = Secretaria
@@ -200,7 +257,7 @@ class SecretariaListView(generic.ListView):
 
 class SecretariaCreateView(generic.CreateView):
     model = Secretaria
-    form_class = SecretariaForm
+    fields = SecretariaForm
     template_name = 'secretaria/secretaria_form.html'
 
     def get_context_data(self, **kwargs):

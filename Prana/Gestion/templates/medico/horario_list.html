@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Horarios</h2>
+  <p><a href="{% url 'medico_list' %}">&lt;&lt; Volver a Médicos</a></p>
+  <p><a href="{% url 'horario_create' medico_id=medico_id %}">Agregar Horario</a></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Día</th>
+        <th>Hora Inicio</th>
+        <th>Hora Fin</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for horario in horarios %}
+        <tr>
+          <td>{{ horario.get_dia_display }}</td>
+          <td>{{ horario.hora_inicio|time }}</td>
+          <td>{{ horario.hora_fin|time }}</td>
+          <td>
+            <a href="{% url 'horario_update' medico_id=horario.medico.pk pk=horario.pk %}">Editar</a>
+            <a href="{% url 'horario_delete' medico_id=horario.medico.pk pk=horario.pk %}">Eliminar</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">No hay horarios registrados.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

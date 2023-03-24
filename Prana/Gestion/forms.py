@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import formset_factory,CheckboxSelectMultiple
-from .models import Medico, Usuario,PrecioConsulta,ObraSocial, Secretaria,Paciente,Turno, Consulta
+from django.forms import formset_factory,CheckboxSelectMultiple, TimeInput
+from .models import Medico, Usuario,PrecioConsulta,ObraSocial, Secretaria,Paciente,Turno, Consulta, HorarioDia
 from datetime import time
 class UsuarioForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -47,7 +47,14 @@ class PrecioConsultaUpdateForm(forms.ModelForm):
         model = PrecioConsulta
         fields = ['obra_social', 'precio', 'fecha_vigencia']
 
-
+class HorarioDiaForm(forms.ModelForm):
+    class Meta:
+        model = HorarioDia
+        fields = [ 'dia', 'hora_inicio', 'hora_fin']
+        widgets = {
+            'hora_inicio': TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+            'hora_fin': TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+        }
 
 class SecretariaForm(forms.ModelForm):
     class Meta:
