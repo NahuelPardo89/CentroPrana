@@ -45,6 +45,7 @@ class UsuarioDeleteView(generic.DeleteView):
 class MedicoListView(generic.ListView):
     model = Medico
     template_name = 'medico/medico_list.html'
+    
 
 class MedicoCreateView(generic.CreateView):
     model = Medico

@@ -45,17 +45,17 @@ class PrecioConsulta(models.Model):
     
 class HorarioDia(models.Model):
     DIA_CHOICES = [
-        ('L', 'Lunes'),
-        ('M', 'Martes'),
-        ('X', 'Miércoles'),
-        ('J', 'Jueves'),
-        ('V', 'Viernes'),
-        ('S', 'Sábado'),
-        ('D', 'Domingo'),
+        ('Lunes', 'Lunes'),
+        ('Martes', 'Martes'),
+        ('Miércoles', 'Miércoles'),
+        ('Jueves', 'Jueves'),
+        ('Viernes', 'Viernes'),
+        ('Sabado', 'Sábado'),
+        
     ]
 
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='horarios_dias')
-    dia = models.CharField(max_length=1, choices=DIA_CHOICES)
+    dia = models.CharField(max_length=9, choices=DIA_CHOICES)
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
 

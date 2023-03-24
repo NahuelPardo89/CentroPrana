@@ -9,6 +9,7 @@
         <th scope="col">Apellido</th>
         <th scope="col">Especialidades</th>
         <th scope="col">Obras Sociales</th>
+        <th scope="col">Horarios</th>
         <th scope="col">Acciones</th>
       </tr>
     </thead>
@@ -28,11 +29,17 @@
             {% endfor %}
           </td>
           <td>
+            {% for horario in medico.horarios_dias.all %}
+              {{ horario.dia }}: {{ horario.hora_inicio|time:'H:i' }} - {{ horario.hora_fin|time:'H:i' }}<br>
+            {% empty %}
+              No hay horarios para este médico.
+            {% endfor %}
+          </td>
+          <td>
             <a href="{% url 'medico_update' medico.pk %}" class="btn btn-sm btn-primary">Editar datos</a>
             <a href="{% url 'medico_precioconsulta_list' medico.pk %}" class="btn btn-sm btn-primary">Editar obras sociales</a>
             <a href="{% url 'horario_list' medico.pk %}" class="btn btn-sm btn-primary">Editar horario</a>
             <a href="{% url 'medico_delete' medico.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
-           
           </td>
         </tr>
       {% endfor %}
