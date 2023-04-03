@@ -8,7 +8,7 @@ from django.dispatch import receiver
 
 class Turno(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE,related_name="turnos")
     fecha = models.DateField()
     hora = models.TimeField()
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.SET_NULL, null=True, blank=True)

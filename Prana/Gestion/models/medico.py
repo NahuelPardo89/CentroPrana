@@ -1,5 +1,6 @@
 from django.db import models
 from .usuario import Usuario
+from datetime import datetime, timedelta
 
 from django.utils import timezone
 
@@ -15,6 +16,39 @@ class Medico(models.Model):
 
     def __str__(self):
         return f'{self.usuario.nombre} {self.usuario.apellido}'
+    # obtiene turnos disponibles para una fecha pasada como argumento
+    def turnos_disponibles(self, fecha):
+        dia_semana = fecha.strftime('%A')
+        dia_semana_espanol = {
+            'Monday': 'Lunes',
+            'Tuesday': 'Martes',
+            'Wednesday': 'Miércoles',
+            'Thursday': 'Jueves',
+            'Friday': 'Viernes',
+            'Saturday': 'Sábado',
+        }
+        dia_semana = dia_semana_espanol.get(dia_semana, dia_semana)
+
+        horarios_dias = self.horarios_dias.filter(dia=dia_semana).order_by('hora_inicio')
+        if not horarios_dias:
+            return []
+
+        turnos = []
+        citas_programadas = self.turnos.filter(fecha=fecha)  # Utiliza la relación inversa aquí
+
+        for horario_dia in horarios_dias:
+            hora_actual = horario_dia.hora_inicio
+            while hora_actual < horario_dia.hora_fin:
+                cita_programada = citas_programadas.filter(hora=hora_actual).exists()
+                if not cita_programada:
+                    turnos.append(hora_actual)
+                
+                # Convierte los objetos time a datetime, realiza la suma y luego extrae la hora
+                hora_actual_dt = datetime.combine(fecha, hora_actual)
+                hora_actual_dt += timedelta(minutes=30)
+                hora_actual = hora_actual_dt.time()
+
+        return turnos
 
 class EspecialidadMedica(models.Model):
     nombre = models.CharField(max_length=100)

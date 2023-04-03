@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
-
+bs5
 {% block content %}
-  <h2>{% if horario %}Editar{% else %}Agregar{% endif %} Horario</h2>
+<div class="container">
+    
+  <h2 >{% if horario %}Editar{% else %}Agregar{% endif %} Horario</h2>
   
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">{% if horario %}Actualizar{% else %}Agregar{% endif %}</button>
+    <div class="mb-3">
+      <label for="{{ form.dia.id_for_label }}" class="form-label">Día</label>
+      {{ form.dia }}
+    </div>
+    <div class="mb-3">
+      <label for="{{ form.hora_inicio.id_for_label }}" class="form-label">Hora de inicio</label>
+      {{ form.hora_inicio }}
+    </div>
+    <div class="mb-3">
+      <label for="{{ form.hora_fin.id_for_label }}" class="form-label">Hora de fin</label>
+      {{ form.hora_fin }}
+    </div>
+    <button type="submit" class="btn btn-primary">{% if horario %}Actualizar{% else %}Agregar{% endif %}</button>
   </form>
+</div>
 {% endblock %}
