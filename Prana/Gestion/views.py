@@ -64,21 +64,21 @@ class MedicoCreateView(generic.CreateView):
         context = self.get_context_data()
         usuario_form = context['usuario_form']
         if usuario_form.is_valid():
-            
             usuario = usuario_form.save(commit=False)
             usuario.is_staff = True
             usuario.set_password(usuario.password)
             usuario.save()
             medicos_group, created = Group.objects.get_or_create(name="Medicos")
             usuario.groups.add(medicos_group)
-            medico = form.save(commit=False)
-            medico.usuario = usuario
-            medico.save()
+            self.object = form.save(commit=False)  
+            self.object.usuario = usuario
+            self.object.save()
             form.save_m2m()
-            return redirect('medico_list')
+            return HttpResponseRedirect(self.get_success_url())
         else:
             return self.render_to_response(self.get_context_data(form=form))
-
+    def get_success_url(self):
+        return reverse_lazy('medico_precioconsulta_create', kwargs={'pk': self.object.usuario.id})
 
 class MedicoUpdateView(generic.UpdateView):
     model = Medico
